@@ -1,7 +1,14 @@
 #include <gtk/gtk.h>
 #include "bt-5.0.0/inc/btree.h"
+#include "dcallback.h"
 
 //Global Object
+GObject *window, 
+            *info_button, *delete_button, *update_button, *add_button, *search_entry,
+            *info_bar, *notify_label, *yes_delete, *yes_add, *yes_update, *no_button,
+            *word_label, *meaning_textview,
+            //No Shape Objects
+            *textbuffer; 
 
 //Global DATA
 BTA * data = NULL;
@@ -11,22 +18,30 @@ BTA * data = NULL;
 //testing callback function
 static void hello_word (GtkWidget * widget, gpointer data)
 {
-    g_print ("hola\n");
+    printf("hola\n");
 } 
 
 int main (int argc, char *argv[])
 {
+    //Chuyen Txt than Tu Dien BTA
+    if (argc == 2)    
+    {
+        convert_text_to_bt(argv[1]);
+        g_print("export to resource.dat\n");
+    }
+
     //Khoi tao data
     data = btopn ("resource.dat", 0, 1);
 
-    //Khai bao cac doi tuong >> Local
+    //Khai bao cac doi tuong >> Local->Global
     GtkBuilder *builder;
+    /*
     GObject *window, 
             *info_button, *delete_button, *update_button, *search_entry,
-            *notify_label, *yes_button, *no_button,
+            *info_bar, *notify_label, *yes_delete, *yes_add, *yes_update, *no_button,
             *word_label, *meaning_textview, 
             //No Shape Objects
-            *textbuffer;
+            *textbuffer; */
 
     //Khoi tao giao dien nguoi dung
     gtk_init (&argc, &argv);
@@ -41,21 +56,63 @@ int main (int argc, char *argv[])
 
     /* TODO Khoi tao tin hieu cua cac Object khac o day*/
 
+        //Khoi tao Word Label
+        word_label = gtk_builder_get_object (builder, "word_label");
+        
+        //Khoi tao Meaning TextView && TextBuffer
+        meaning_textview = gtk_builder_get_object (builder, "meaning_textview");
+        textbuffer = gtk_builder_get_object (builder, "textbuffer");
+
         //Khoi tao Info Button
         info_button = gtk_builder_get_object (builder, "info_button");
         g_signal_connect (info_button, "clicked", G_CALLBACK (hello_word), NULL);
 
         //Khoi tao Delete Button
         delete_button = gtk_builder_get_object (builder, "delete_button");
-        g_signal_connect (delete_button, "clicked", G_CALLBACK (hello_word), NULL);
+        g_signal_connect (delete_button, "clicked", G_CALLBACK (delete_button_clicked), NULL);
 
         //Khoi tao Update Button
         update_button = gtk_builder_get_object (builder, "update_button");
-        g_signal_connect (update_button, "clicked", G_CALLBACK (hello_word), NULL);
+        g_signal_connect (update_button, "clicked", G_CALLBACK (update_button_clicked), NULL);
+
+        //Khoi tao Add Button
+        add_button = gtk_builder_get_object (builder, "add_button");
+        g_signal_connect (add_button, "clicked", G_CALLBACK (add_button_clicked), NULL);
+
+        //Khoi tao Search Entry
+        search_entry = gtk_builder_get_object (builder, "search_entry");
+        g_signal_connect (search_entry, "activate", G_CALLBACK (search_entry_activate), NULL);
+
+        // >> Tin hieu nhan Key Bat ki
+        //g_signal_connect (search_entry, "key-press-event", G_CALLBACK (hello_word), NULL);    
+
+        //Khoi tao Info Bar
+        info_bar = gtk_builder_get_object (builder, "info_bar");
+
+        //Khoi tao Notify Label
+        notify_label = gtk_builder_get_object (builder, "notify_label");
+
+        //Khoi tao Yes Button >> NO CALLBACK function 
+        yes_delete = gtk_builder_get_object (builder, "yes_delete");
+        g_signal_connect (yes_delete, "clicked", G_CALLBACK (hello_word), NULL);
+
+        yes_add = gtk_builder_get_object (builder, "yes_add");
+        g_signal_connect (yes_add, "clicked", G_CALLBACK (hello_word), NULL);
+
+        yes_update = gtk_builder_get_object (builder, "yes_update");
+        g_signal_connect (yes_update, "clicked", G_CALLBACK (hello_word), NULL);
+
+        //khoi tao No Button >> NO CALLBACK function 
+        no_button = gtk_builder_get_object (builder, "no_button");
+        g_signal_connect (no_button, "clicked", G_CALLBACK (no_button_clicked), NULL);
 
         
-    //Hien thi toan bo Window va "Child"
-    gtk_widget_show_all (window); 
+        
+        
+        
+        
+    //Hien thi Window va "Child"
+    gtk_widget_show (window); 
 
     //Ngung tham chieu Builder (free)
     g_object_unref (builder);

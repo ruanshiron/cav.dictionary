@@ -8,9 +8,7 @@
     <property name="stock">gtk-about</property>
     <property name="icon_size">1</property>
   </object>
-  <object class="GtkTextTagTable" id="texttagtable"/>
   <object class="GtkTextBuffer" id="textbuffer">
-    <property name="tag_table">texttagtable</property>
     <property name="text" translatable="yes">@love /lʌv/
 *  danh từ
 - lòng yêu, tình thương
@@ -52,90 +50,84 @@
     <property name="default_width">640</property>
     <property name="default_height">350</property>
     <child>
-      <object class="GtkBox">
+      <object class="GtkBox" id="main_box">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <child>
-          <object class="GtkInfoBar">
-            <property name="visible">True</property>
+          <object class="GtkBox" id="info_bar">
             <property name="can_focus">False</property>
-            <child internal-child="action_area">
-              <object class="GtkButtonBox">
+            <property name="margin_left">8</property>
+            <property name="spacing">16</property>
+            <child>
+              <object class="GtkLabel" id="notify_label">
+                <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="spacing">4</property>
-                <property name="layout_style">end</property>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
+                <property name="label" translatable="yes">Do you want to delete?</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="fill">False</property>
+                <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
-            <child internal-child="content_area">
-              <object class="GtkBox">
-                <property name="can_focus">False</property>
-                <property name="spacing">16</property>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="margin_left">8</property>
-                    <property name="margin_right">32</property>
-                    <property name="label" translatable="yes">Do you want to delete?</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton">
-                    <property name="label" translatable="yes">Yes</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton">
-                    <property name="label" translatable="yes">No</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
+            <child>
+              <object class="GtkButton" id="yes_delete">
+                <property name="label" translatable="yes">Yes</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="yes_add">
+                <property name="label" translatable="yes">Yes</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="yes_update">
+                <property name="label" translatable="yes">Yes</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="no_button">
+                <property name="label" translatable="yes">No</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">4</property>
               </packing>
             </child>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
+            <property name="padding">5</property>
             <property name="position">0</property>
           </packing>
         </child>
@@ -155,7 +147,7 @@
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkLabel" id="label">
+                      <object class="GtkLabel" id="word_label">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">center</property>
@@ -178,13 +170,13 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkTextView">
+                      <object class="GtkTextView" id="meaning_textview">
                         <property name="width_request">600</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">center</property>
                         <property name="valign">start</property>
-                        <property name="margin_top">4</property>
+                        <property name="margin_top">8</property>
                         <property name="pixels_above_lines">1</property>
                         <property name="pixels_below_lines">1</property>
                         <property name="editable">False</property>
@@ -254,7 +246,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="update_button">
+          <object class="GtkButton" id="add_button">
             <property name="label" translatable="yes">Thêm</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -262,6 +254,17 @@
           </object>
           <packing>
             <property name="position">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="update_button">
+            <property name="label" translatable="yes">Sửa</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+          </object>
+          <packing>
+            <property name="position">4</property>
           </packing>
         </child>
         <child>
@@ -274,10 +277,11 @@
             <property name="primary_icon_sensitive">False</property>
           </object>
           <packing>
-            <property name="position">3</property>
+            <property name="position">4</property>
           </packing>
         </child>
       </object>
     </child>
   </object>
+  <object class="GtkTextTagTable" id="texttagtable"/>
 </interface>

@@ -21,6 +21,23 @@ static void hello_word (GtkWidget * widget, gpointer data)
     printf("hola\n");
 } 
 
+
+void show_about_dialog(GtkButton * button, gpointer none)
+{
+  GdkPixbuf *pixbuf=gdk_pixbuf_new_from_file_at_size("images/about.png",150,150,NULL);
+  GtkWidget *dialog=gtk_about_dialog_new();
+  gtk_about_dialog_set_program_name(GTK_ABOUT_DIALOG(dialog),"DICTIONARY");
+  gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(dialog),"v1.0");
+  gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(dialog),"C Avanced Team: \n Nguyễn Đức Anh 20165735\nNguyễn Thế Vinh 20167446\nLê Thị Hải Yến 20164753\n");
+  gtk_about_dialog_set_comments(GTK_ABOUT_DIALOG(dialog),"A project by C Avanced Team");
+  gtk_about_dialog_set_website (GTK_ABOUT_DIALOG(dialog),"https://github.com/ruanshiron");
+  gtk_about_dialog_set_website_label (GTK_ABOUT_DIALOG(dialog),"Github");
+  gtk_about_dialog_set_logo(GTK_ABOUT_DIALOG(dialog),pixbuf);
+  g_object_unref(pixbuf),pixbuf=NULL;
+  gtk_dialog_run(GTK_DIALOG(dialog));
+  gtk_widget_destroy(dialog);
+}
+
 int main (int argc, char *argv[])
 {
     //Chuyen Txt than Tu Dien BTA
@@ -48,7 +65,7 @@ int main (int argc, char *argv[])
 
     //Khoi tao GtkBuilder
     builder = gtk_builder_new ();
-    gtk_builder_add_from_file (builder, "glade/newW.ui", NULL);
+    gtk_builder_add_from_file (builder, "glade/newW.glade", NULL);
 
     //Khoi tao Window >> Tin hieu "tat cua so"
     window = gtk_builder_get_object (builder, "window");
@@ -65,7 +82,7 @@ int main (int argc, char *argv[])
 
         //Khoi tao Info Button
         info_button = gtk_builder_get_object (builder, "info_button");
-        g_signal_connect (info_button, "clicked", G_CALLBACK (hello_word), NULL);
+        g_signal_connect (info_button, "clicked", G_CALLBACK (show_about_dialog), NULL);
 
         //Khoi tao Delete Button
         delete_button = gtk_builder_get_object (builder, "delete_button");
@@ -94,7 +111,7 @@ int main (int argc, char *argv[])
 
         //Khoi tao Yes Button >> NO CALLBACK function 
         yes_delete = gtk_builder_get_object (builder, "yes_delete");
-        g_signal_connect (yes_delete, "clicked", G_CALLBACK (hello_word), NULL);
+        g_signal_connect (yes_delete, "clicked", G_CALLBACK (yes_delete_clicked), NULL);
 
         yes_add = gtk_builder_get_object (builder, "yes_add");
         g_signal_connect (yes_add, "clicked", G_CALLBACK (hello_word), NULL);

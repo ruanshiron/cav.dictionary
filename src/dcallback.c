@@ -131,3 +131,7 @@ void no_button_clicked (GtkButton * button, gpointer NONE)
     gtk_widget_set_visible (GTK_WIDGET(info_bar), FALSE);
 }
 
+void yes_delete_clicked(GtkButton *button, gpointer NONE)
+{
+    printf("safdsfsdff\n");
+}

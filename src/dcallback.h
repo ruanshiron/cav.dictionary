@@ -31,6 +31,7 @@ void add_button_clicked (GtkButton * button, gpointer NONE);
 
 void no_button_clicked (GtkButton *, gpointer);
 
+void yes_delete_clicked(GtkButton *, gpointer);
 
 
 #endif

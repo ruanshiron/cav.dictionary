@@ -15,7 +15,8 @@ extern  GObject *window,
                 *word_label, *meaning_textview,
                 *popover, *pop_label,
                 //No Shape Objects
-                *textbuffer; 
+                *textbuffer,
+                *comple, *liststore,*listbox;
 
 //Global DATA
 extern BTA * data;
@@ -38,6 +39,9 @@ void yes_add_clicked (GtkButton *, gpointer);
 
 void yes_update_clicked (GtkButton *, gpointer);
 
-void search_entry_key_press (GtkEntry * entry, GdkEvent * event, gpointer NONE);
+gboolean search_entry_key_press (GtkEntry * entry, GdkEvent * event, gpointer NONE);
+
+void show_about_dialog(GtkButton * button, gpointer none);
+
 
 #endif

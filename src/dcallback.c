@@ -18,6 +18,29 @@ int isBlank(char * text)
     return 1;
 }
 
+void find_next_word (char * word)
+{
+    int rsize, value;
+    if (!bfndky(data, word, &rsize)) 
+    {
+        bnxtky(data, word, &value);
+        gtk_entry_set_text(search_entry, word);
+        search_entry_activate(search_entry, NULL);
+    }
+    else 
+    {
+        char nextword[WORD_LENGHT];
+        strcpy(nextword, word);
+        printf("%s\n", word);
+        btins(data, nextword, "", 1);
+        bnxtky(data, nextword, &value);
+        gtk_entry_set_text(search_entry, nextword);
+        search_entry_activate(search_entry, NULL);
+        btdel(data, word);
+        printf("%s\n", word);
+    }
+}
+
 void separate_mean(char* mean) 
 {
     int i = 0, j = 1;
@@ -73,7 +96,7 @@ void search_entry_activate (GtkEntry * entry, gpointer NONE)
 {
     char word[WORD_LENGHT];
     char meaning[MEANING_LENGHT];
-    strcpy (word, gtk_entry_get_text (entry));
+    strcpy (word, gtk_entry_get_text (search_entry));
 
     int rsize = 0;
     btsel (data, word, meaning, MEANING_LENGHT, &rsize);
@@ -257,7 +280,38 @@ void yes_update_clicked (GtkButton * button, gpointer NONE)
     gtk_widget_set_visible (GTK_WIDGET(info_bar), FALSE);
 }
 
-void search_entry_key_press (GtkEntry * entry, GdkEvent * event, gpointer NONE)
+void show_completion (char * word)
+{
+    GtkTreeIter Iter;
+    
+    gtk_list_store_clear(liststore);
+    
+    
+    //else printf("dech");
+    char nextword[WORD_LENGHT];
+    strcpy(nextword, word);
+
+    int rsize;
+    int existed = !bfndky(data, word, &rsize);
+    if (existed)
+    {
+        gtk_list_store_append(liststore, &Iter);
+		gtk_list_store_set(liststore, &Iter, 0, nextword, -1 );
+    }
+    else btins(data, word, "#", 1);
+
+    int i;
+    for (i = 0; i < 20; i++) 
+    {
+        int value;
+		bnxtky (data, nextword, &value);
+        gtk_list_store_append(liststore, &Iter);
+        gtk_list_store_set(liststore, &Iter, 0, nextword, -1 );
+	}
+    if (!existed) btdel(data, word);
+}
+
+gboolean search_entry_key_press (GtkEntry * entry, GdkEvent * event, gpointer NONE)
 {
     GdkEventKey *keyEvent = (GdkEventKey *)event;
     char word[WORD_LENGHT];
@@ -266,24 +320,48 @@ void search_entry_key_press (GtkEntry * entry, GdkEvent * event, gpointer NONE)
    
     if (keyEvent->keyval == GDK_KEY_Tab) 
     {
-        //gtk_widget_set_state_flags (search_entry, GTK_STATE_FLAG_NORMAL, FALSE);
-        gtk_widget_grab_focus (search_entry);
-        gtk_widget_activate (search_entry);
+        // gtk_widget_set_state_flags (search_entry, GTK_STATE_FLAG_NORMAL, FALSE);
+        gtk_widget_grab_focus (update_button);
+        // gtk_entry_grab_focus_without_selecting (search_entry);
+        // gtk_widget_activate (search_entry);
+        find_next_word (word);
     }
     else 
     {
         printf("%d\n", keyEvent->keyval);
-        
+            
+        if (keyEvent->keyval != GDK_KEY_BackSpace)
         {
-            if (keyEvent->keyval != GDK_KEY_BackSpace)
-            {
-                //Phải khởi tạo biến cho strlen() ở ngoài vì sau khi gán phần tử cuốí cùng của word[] là key_valua thì không có '\0' kí tử rác ở sau làm strlen() không ổn định
-                int l = strlen(word);
-                word[l] = keyEvent->keyval;
-                word[l+1] = '\0';
-            } 
-            else word[strlen(word)-1] = '\0';
-        }
-        //how_completion(word, existed_word(data,word));
+            // Phải khởi tạo biến cho strlen() ở ngoài vì sau khi gán phần tử cuốí cùng của word[] là key_valua thì không có '\0' kí tử rác ở sau làm strlen() không ổn định
+            int l = strlen(word);
+            if ((keyEvent->keyval != 65364) && (keyEvent->keyval !=65362))
+            word[l] = keyEvent->keyval;
+            word[l+1] = '\0';
+        } 
+        else word[strlen(word)-1] = '\0';
+        
+        show_completion(word);
     }
+
+    //Return FALSE to allow signal to another widget
+    return FALSE;
 }
+
+void show_about_dialog(GtkButton * button, gpointer none)
+{
+    GdkPixbuf *pixbuf=gdk_pixbuf_new_from_file_at_size("images/about.png",150,150,NULL);
+    GtkWidget *dialog=gtk_about_dialog_new();
+    gtk_about_dialog_set_program_name(GTK_ABOUT_DIALOG(dialog),"DICTIONARY");
+    gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(dialog),"v1.0");
+    gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(dialog),"C Avanced Team: \n Nguyễn Đức Anh 20165735\nNguyễn Thế Vinh 20167446\nLê Thị Hải Yến 20164753\n");
+    gtk_about_dialog_set_comments(GTK_ABOUT_DIALOG(dialog),"A project by C Avanced Team");
+    gtk_about_dialog_set_website (GTK_ABOUT_DIALOG(dialog),"https://github.com/ruanshiron");
+    gtk_about_dialog_set_website_label (GTK_ABOUT_DIALOG(dialog),"Github");
+    gtk_about_dialog_set_logo(GTK_ABOUT_DIALOG(dialog),pixbuf);
+    g_object_unref(pixbuf),pixbuf=NULL;
+    gtk_window_set_transient_for (dialog, window);
+    gtk_dialog_run(GTK_DIALOG(dialog));
+    gtk_widget_destroy(dialog);
+}
+
+

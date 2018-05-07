@@ -9,7 +9,8 @@ GObject *window,
             *word_label, *meaning_textview,
             *popover, *pop_label,
             //No Shape Objects
-            *textbuffer; 
+            *textbuffer,
+            *comple, *liststore, *listbox;
 
 //Global DATA
 BTA * data = NULL;
@@ -54,8 +55,16 @@ int main (int argc, char *argv[])
     //Khoi tao Window >> Tin hieu "tat cua so"
     window = gtk_builder_get_object (builder, "window");
     g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
+    // g_signal_connect (window, "key-press-event", G_CALLBACK (window_key_press), NULL);
 
     /* TODO Khoi tao tin hieu cua cac Object khac o day*/
+
+        comple = gtk_entry_completion_new();
+        gtk_entry_completion_set_text_column(comple, 0);
+        liststore = gtk_list_store_new(1,  G_TYPE_STRING);
+
+        gtk_entry_completion_set_model(comple, GTK_TREE_MODEL(liststore));
+        
 
         //Khoi tao Word Label
         word_label = gtk_builder_get_object (builder, "word_label");
@@ -70,7 +79,7 @@ int main (int argc, char *argv[])
 
         //Khoi tao Info Button
         info_button = gtk_builder_get_object (builder, "info_button");
-        g_signal_connect (info_button, "clicked", G_CALLBACK (hello_word), NULL);
+        g_signal_connect (info_button, "clicked", G_CALLBACK (show_about_dialog), NULL);
 
         //Khoi tao Delete Button
         delete_button = gtk_builder_get_object (builder, "delete_button");
@@ -90,9 +99,7 @@ int main (int argc, char *argv[])
         g_signal_connect (search_entry, "grab-focus", G_CALLBACK (no_button_clicked), NULL);
         g_signal_connect (search_entry, "key-press-event", G_CALLBACK (search_entry_key_press), NULL);
 
-
-        // >> Tin hieu nhan Key Bat ki
-        //g_signal_connect (search_entry, "key-press-event", G_CALLBACK (hello_word), NULL);    
+        listbox = gtk_builder_get_object(builder, "listbox");
 
         //Khoi tao Info Bar
         info_bar = gtk_builder_get_object (builder, "info_bar");
@@ -115,7 +122,7 @@ int main (int argc, char *argv[])
         g_signal_connect (no_button, "clicked", G_CALLBACK (no_button_clicked), NULL);
 
         
-        
+        gtk_entry_set_completion(search_entry, comple);
         
         
         

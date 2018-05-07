@@ -7,6 +7,7 @@ GObject *window,
             *info_button, *delete_button, *update_button, *add_button, *search_entry,
             *info_bar, *notify_label, *yes_delete, *yes_add, *yes_update, *no_button,
             *word_label, *meaning_textview,
+            *popover, *pop_label,
             //No Shape Objects
             *textbuffer; 
 
@@ -63,6 +64,10 @@ int main (int argc, char *argv[])
         meaning_textview = gtk_builder_get_object (builder, "meaning_textview");
         textbuffer = gtk_builder_get_object (builder, "textbuffer");
 
+        //Khoi tao popover >> pop label
+        popover = gtk_builder_get_object (builder, "popover");
+        pop_label = gtk_builder_get_object (builder, "pop_label");
+
         //Khoi tao Info Button
         info_button = gtk_builder_get_object (builder, "info_button");
         g_signal_connect (info_button, "clicked", G_CALLBACK (hello_word), NULL);
@@ -82,6 +87,7 @@ int main (int argc, char *argv[])
         //Khoi tao Search Entry
         search_entry = gtk_builder_get_object (builder, "search_entry");
         g_signal_connect (search_entry, "activate", G_CALLBACK (search_entry_activate), NULL);
+        g_signal_connect (search_entry, "grab-focus", G_CALLBACK (no_button_clicked), NULL);
 
         // >> Tin hieu nhan Key Bat ki
         //g_signal_connect (search_entry, "key-press-event", G_CALLBACK (hello_word), NULL);    
@@ -94,13 +100,13 @@ int main (int argc, char *argv[])
 
         //Khoi tao Yes Button >> NO CALLBACK function 
         yes_delete = gtk_builder_get_object (builder, "yes_delete");
-        g_signal_connect (yes_delete, "clicked", G_CALLBACK (hello_word), NULL);
+        g_signal_connect (yes_delete, "clicked", G_CALLBACK (yes_delete_clicked), NULL);
 
         yes_add = gtk_builder_get_object (builder, "yes_add");
-        g_signal_connect (yes_add, "clicked", G_CALLBACK (hello_word), NULL);
+        g_signal_connect (yes_add, "clicked", G_CALLBACK (yes_add_clicked), NULL);
 
         yes_update = gtk_builder_get_object (builder, "yes_update");
-        g_signal_connect (yes_update, "clicked", G_CALLBACK (hello_word), NULL);
+        g_signal_connect (yes_update, "clicked", G_CALLBACK (yes_update_clicked), NULL);
 
         //khoi tao No Button >> NO CALLBACK function 
         no_button = gtk_builder_get_object (builder, "no_button");

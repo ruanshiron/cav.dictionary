@@ -38,4 +38,6 @@ void yes_add_clicked (GtkButton *, gpointer);
 
 void yes_update_clicked (GtkButton *, gpointer);
 
+void search_entry_key_press (GtkEntry * entry, GdkEvent * event, gpointer NONE);
+
 #endif

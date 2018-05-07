@@ -256,3 +256,34 @@ void yes_update_clicked (GtkButton * button, gpointer NONE)
 
     gtk_widget_set_visible (GTK_WIDGET(info_bar), FALSE);
 }
+
+void search_entry_key_press (GtkEntry * entry, GdkEvent * event, gpointer NONE)
+{
+    GdkEventKey *keyEvent = (GdkEventKey *)event;
+    char word[WORD_LENGHT];
+
+    strcpy(word, gtk_entry_get_text(GTK_ENTRY(entry)));
+   
+    if (keyEvent->keyval == GDK_KEY_Tab) 
+    {
+        //gtk_widget_set_state_flags (search_entry, GTK_STATE_FLAG_NORMAL, FALSE);
+        gtk_widget_grab_focus (search_entry);
+        gtk_widget_activate (search_entry);
+    }
+    else 
+    {
+        printf("%d\n", keyEvent->keyval);
+        
+        {
+            if (keyEvent->keyval != GDK_KEY_BackSpace)
+            {
+                //Phải khởi tạo biến cho strlen() ở ngoài vì sau khi gán phần tử cuốí cùng của word[] là key_valua thì không có '\0' kí tử rác ở sau làm strlen() không ổn định
+                int l = strlen(word);
+                word[l] = keyEvent->keyval;
+                word[l+1] = '\0';
+            } 
+            else word[strlen(word)-1] = '\0';
+        }
+        //how_completion(word, existed_word(data,word));
+    }
+}

@@ -88,6 +88,8 @@ int main (int argc, char *argv[])
         search_entry = gtk_builder_get_object (builder, "search_entry");
         g_signal_connect (search_entry, "activate", G_CALLBACK (search_entry_activate), NULL);
         g_signal_connect (search_entry, "grab-focus", G_CALLBACK (no_button_clicked), NULL);
+        g_signal_connect (search_entry, "key-press-event", G_CALLBACK (search_entry_key_press), NULL);
+
 
         // >> Tin hieu nhan Key Bat ki
         //g_signal_connect (search_entry, "key-press-event", G_CALLBACK (hello_word), NULL);    

@@ -7,10 +7,12 @@ GObject *window,
             *info_button, *delete_button, *update_button, *add_button, *search_entry,
             *info_bar, *notify_label, *yes_delete, *yes_add, *yes_update, *no_button,
             *word_label, *meaning_textview,
-            *popover, *pop_label,
+            // *popover, *pop_label,
+            *status_label,
             //No Shape Objects
             *textbuffer,
-            *comple, *liststore, *listbox;
+            *comple, *liststore;
+
 
 //Global DATA
 BTA * data = NULL;
@@ -59,23 +61,22 @@ int main (int argc, char *argv[])
 
     /* TODO Khoi tao tin hieu cua cac Object khac o day*/
 
-        comple = gtk_entry_completion_new();
-        gtk_entry_completion_set_text_column(comple, 0);
-        liststore = gtk_list_store_new(1,  G_TYPE_STRING);
-
-        gtk_entry_completion_set_model(comple, GTK_TREE_MODEL(liststore));
+        
         
 
         //Khoi tao Word Label
         word_label = gtk_builder_get_object (builder, "word_label");
+
+        // Khoi tao status label
+        status_label = gtk_builder_get_object (builder, "status_label");
         
         //Khoi tao Meaning TextView && TextBuffer
         meaning_textview = gtk_builder_get_object (builder, "meaning_textview");
         textbuffer = gtk_builder_get_object (builder, "textbuffer");
 
         //Khoi tao popover >> pop label
-        popover = gtk_builder_get_object (builder, "popover");
-        pop_label = gtk_builder_get_object (builder, "pop_label");
+        // popover = gtk_builder_get_object (builder, "popover");
+        // pop_label = gtk_builder_get_object (builder, "pop_label");
 
         //Khoi tao Info Button
         info_button = gtk_builder_get_object (builder, "info_button");
@@ -99,7 +100,6 @@ int main (int argc, char *argv[])
         g_signal_connect (search_entry, "grab-focus", G_CALLBACK (no_button_clicked), NULL);
         g_signal_connect (search_entry, "key-press-event", G_CALLBACK (search_entry_key_press), NULL);
 
-        listbox = gtk_builder_get_object(builder, "listbox");
 
         //Khoi tao Info Bar
         info_bar = gtk_builder_get_object (builder, "info_bar");
@@ -121,10 +121,15 @@ int main (int argc, char *argv[])
         no_button = gtk_builder_get_object (builder, "no_button");
         g_signal_connect (no_button, "clicked", G_CALLBACK (no_button_clicked), NULL);
 
+        // Khoi tao completion
+        comple = gtk_entry_completion_new();
+        gtk_entry_completion_set_text_column(comple, 0);
+        liststore = gtk_list_store_new(1, G_TYPE_STRING);
+
+        gtk_entry_completion_set_model(comple, GTK_TREE_MODEL(liststore));
+        gtk_entry_set_completion(GTK_ENTRY(search_entry), comple);
         
-        gtk_entry_set_completion(search_entry, comple);
-        
-        
+        //g_signal_connect (comple, "cursor-on-match", G_CALLBACK (cursor_match), NULL);
         
     //Hien thi Window va "Child"
     gtk_widget_show (window); 

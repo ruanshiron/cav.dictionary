@@ -31,13 +31,13 @@ void find_next_word (char * word)
     {
         char nextword[WORD_LENGHT];
         strcpy(nextword, word);
-        printf("%s\n", word);
+        //printf("%s\n", word);
         btins(data, nextword, "", 1);
         bnxtky(data, nextword, &value);
         gtk_entry_set_text(search_entry, nextword);
         search_entry_activate(search_entry, NULL);
         btdel(data, word);
-        printf("%s\n", word);
+        //printf("%s\n", word);
     }
 }
 
@@ -114,9 +114,12 @@ void search_entry_activate (GtkEntry * entry, gpointer NONE)
         gtk_text_view_set_buffer(GTK_TEXT_VIEW (meaning_textview), GTK_TEXT_BUFFER( textbuffer));
         
         //Notify Popup 
-        gtk_label_set_label (GTK_LABEL(pop_label), "Không tìm thấy");
-        gtk_popover_set_relative_to (GTK_POPOVER(popover), GTK_WIDGET(search_entry)) ;
-        gtk_popover_popup (GTK_POPOVER(popover));
+        // gtk_label_set_label (GTK_LABEL(pop_label), "Không tìm thấy");
+        // gtk_popover_set_relative_to (GTK_POPOVER(popover), GTK_WIDGET(search_entry)) ;
+        // gtk_popover_popup (GTK_POPOVER(popover));
+
+        gtk_label_set_label (GTK_LABEL (status_label), "Không tìm thấy");
+        gtk_widget_set_visible (GTK_LABEL (status_label), TRUE);
 
         //An Update Button  "Sửa"
         gtk_widget_set_sensitive (GTK_WIDGET(update_button), FALSE);
@@ -187,6 +190,7 @@ void no_button_clicked (GtkButton * button, gpointer NONE)
     gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (meaning_textview), FALSE);
 
     gtk_widget_set_visible (GTK_WIDGET(info_bar), FALSE);
+    gtk_widget_set_visible (GTK_WIDGET(status_label), FALSE);
 }
 
 void yes_delete_clicked (GtkButton * button, gpointer NONE)
@@ -199,9 +203,12 @@ void yes_delete_clicked (GtkButton * button, gpointer NONE)
     strcat (notify, word);
     strcat (notify, "\"  khỏi từ điển!");
 
-    gtk_label_set_label (GTK_LABEL(pop_label), notify);
-    gtk_popover_set_relative_to (GTK_POPOVER(popover), GTK_WIDGET(delete_button)) ;
-    gtk_popover_popup (GTK_POPOVER(popover));
+    // gtk_label_set_label (GTK_LABEL(pop_label), notify);
+    // gtk_popover_set_relative_to (GTK_POPOVER(popover), GTK_WIDGET(delete_button)) ;
+    // gtk_popover_popup (GTK_POPOVER(popover));
+
+    gtk_label_set_label (GTK_LABEL (status_label), notify);
+    gtk_widget_set_visible (GTK_LABEL (status_label), TRUE);
 
     gtk_widget_set_visible (GTK_WIDGET(info_bar), FALSE);
 }
@@ -219,9 +226,13 @@ void yes_add_clicked (GtkButton * button, gpointer NONE)
     char * meaning = gtk_text_buffer_get_text (GTK_TEXT_BUFFER(textbuffer), &startIter, &endIter, FALSE);
     if (isBlank(meaning)) 
     {
-        gtk_label_set_label (GTK_LABEL(pop_label), "Không được để trống");
-        gtk_popover_set_relative_to (GTK_POPOVER(popover), GTK_WIDGET(add_button)) ;
-        gtk_popover_popup (GTK_POPOVER(popover));
+        // gtk_label_set_label (GTK_LABEL(pop_label), "Không được để trống");
+        // gtk_popover_set_relative_to (GTK_POPOVER(popover), GTK_WIDGET(add_button)) ;
+        // gtk_popover_popup (GTK_POPOVER(popover));
+
+        gtk_label_set_label (GTK_LABEL (status_label), "Không được để trống");
+        gtk_widget_set_visible (GTK_LABEL (status_label), TRUE);
+
         return;
     }
 
@@ -233,9 +244,13 @@ void yes_add_clicked (GtkButton * button, gpointer NONE)
     strcat (notify, word);
     strcat (notify, "\"  vào từ điển!");
 
-    gtk_label_set_label (GTK_LABEL(pop_label), notify);
-    gtk_popover_set_relative_to (GTK_POPOVER(popover), GTK_WIDGET(add_button)) ;
-    gtk_popover_popup (GTK_POPOVER(popover));
+    // gtk_label_set_label (GTK_LABEL(pop_label), notify);
+    // gtk_popover_set_relative_to (GTK_POPOVER(popover), GTK_WIDGET(add_button)) ;
+    // gtk_popover_popup (GTK_POPOVER(popover));
+
+    gtk_label_set_label (GTK_LABEL (status_label), notify);
+    gtk_widget_set_visible (GTK_LABEL (status_label), TRUE);
+    
 
     gtk_text_view_set_editable (GTK_TEXT_VIEW (meaning_textview), FALSE);
     gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (meaning_textview), FALSE);
@@ -256,9 +271,13 @@ void yes_update_clicked (GtkButton * button, gpointer NONE)
     char * meaning = gtk_text_buffer_get_text (GTK_TEXT_BUFFER(textbuffer), &startIter, &endIter, FALSE);
     if (isBlank(meaning)) 
     {
-        gtk_label_set_label (GTK_LABEL(pop_label), "Không được để trống");
-        gtk_popover_set_relative_to (GTK_POPOVER(popover), GTK_WIDGET(add_button)) ;
-        gtk_popover_popup (GTK_POPOVER(popover));
+        // gtk_label_set_label (GTK_LABEL(pop_label), "Không được để trống");
+        // gtk_popover_set_relative_to (GTK_POPOVER(popover), GTK_WIDGET(add_button)) ;
+        // gtk_popover_popup (GTK_POPOVER(popover));
+
+        gtk_label_set_label (GTK_LABEL (status_label), "Không được để trống");
+        gtk_widget_set_visible (GTK_LABEL (status_label), TRUE);
+
         return;
     }
 
@@ -270,14 +289,30 @@ void yes_update_clicked (GtkButton * button, gpointer NONE)
     strcat (notify, word);
     strcat (notify, "\"  vào từ điển!");
 
-    gtk_label_set_label (GTK_LABEL(pop_label), notify);
-    gtk_popover_set_relative_to (GTK_POPOVER(popover), GTK_WIDGET(update_button)) ;
-    gtk_popover_popup (GTK_POPOVER(popover));
+    // gtk_label_set_label (GTK_LABEL(pop_label), notify);
+    // gtk_popover_set_relative_to (GTK_POPOVER(popover), GTK_WIDGET(update_button)) ;
+    // gtk_popover_popup (GTK_POPOVER(popover));
+
+     gtk_label_set_label (GTK_LABEL (status_label), notify);
+    gtk_widget_set_visible (GTK_LABEL (status_label), TRUE);
 
     gtk_text_view_set_editable (GTK_TEXT_VIEW (meaning_textview), FALSE);
     gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (meaning_textview), FALSE);
 
     gtk_widget_set_visible (GTK_WIDGET(info_bar), FALSE);
+}
+
+int prefix(const char * big, const char * small) 
+{
+	int small_len = strlen(small);
+	int big_len = strlen(big);
+	int i;
+	if (big_len < small_len)
+		return 0;
+	for (i = 0; i < small_len; i++)
+		if (big[i] != small[i])
+			return 0;
+	return 1;
 }
 
 void show_completion (char * word)
@@ -301,12 +336,15 @@ void show_completion (char * word)
     else btins(data, word, "#", 1);
 
     int i;
-    for (i = 0; i < 20; i++) 
+    for (i = 0; i < 10; i++) 
     {
         int value;
 		bnxtky (data, nextword, &value);
-        gtk_list_store_append(liststore, &Iter);
-        gtk_list_store_set(liststore, &Iter, 0, nextword, -1 );
+        if (prefix(nextword, word))
+        {
+            gtk_list_store_append(liststore, &Iter);
+            gtk_list_store_set(liststore, &Iter, 0, nextword, -1 );
+        }
 	}
     if (!existed) btdel(data, word);
 }
@@ -328,14 +366,14 @@ gboolean search_entry_key_press (GtkEntry * entry, GdkEvent * event, gpointer NO
     }
     else 
     {
-        printf("%d\n", keyEvent->keyval);
+        //printf("%d\n", keyEvent->keyval);
             
         if (keyEvent->keyval != GDK_KEY_BackSpace)
         {
             // Phải khởi tạo biến cho strlen() ở ngoài vì sau khi gán phần tử cuốí cùng của word[] là key_valua thì không có '\0' kí tử rác ở sau làm strlen() không ổn định
             int l = strlen(word);
-            if ((keyEvent->keyval != 65364) && (keyEvent->keyval !=65362))
-            word[l] = keyEvent->keyval;
+            if ((keyEvent->keyval != 65364) && (keyEvent->keyval != 65362))
+                word[l] = keyEvent->keyval;
             word[l+1] = '\0';
         } 
         else word[strlen(word)-1] = '\0';
@@ -364,4 +402,14 @@ void show_about_dialog(GtkButton * button, gpointer none)
     gtk_widget_destroy(dialog);
 }
 
-
+gboolean cursor_match   (GtkEntryCompletion *entrycomple,
+                        GtkTreeModel       *model,
+                        GtkTreeIter        *iter,
+                        gpointer            user_data)
+{
+    char * word;
+    gtk_tree_model_get (model, iter, 0, &word, -1);
+    printf("%s\n", word);
+    
+    return FALSE;
+}

@@ -13,10 +13,12 @@ extern  GObject *window,
                 *info_button, *delete_button, *update_button, *add_button, *search_entry,
                 *info_bar, *notify_label, *yes_delete, *yes_add, *yes_update, *no_button,
                 *word_label, *meaning_textview,
-                *popover, *pop_label,
+                //*popover, *pop_label,
+                *status_label,
                 //No Shape Objects
                 *textbuffer,
-                *comple, *liststore,*listbox;
+                *comple, *liststore;
+
 
 //Global DATA
 extern BTA * data;
@@ -42,6 +44,8 @@ void yes_update_clicked (GtkButton *, gpointer);
 gboolean search_entry_key_press (GtkEntry * entry, GdkEvent * event, gpointer NONE);
 
 void show_about_dialog(GtkButton * button, gpointer none);
+
+// gboolean cursor_match (GtkEntryCompletion *,GtkTreeModel *,GtkTreeIter *,gpointer );
 
 
 #endif

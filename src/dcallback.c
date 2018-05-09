@@ -94,6 +94,8 @@ int convert_text_to_bt(char * filename)
 
 void search_entry_activate (GtkEntry * entry, gpointer NONE)
 {
+    gtk_widget_set_visible (GTK_LABEL (status_label), FALSE);
+
     char word[WORD_LENGHT];
     char meaning[MEANING_LENGHT];
     strcpy (word, gtk_entry_get_text (search_entry));
@@ -359,8 +361,10 @@ gboolean search_entry_key_press (GtkEntry * entry, GdkEvent * event, gpointer NO
     if (keyEvent->keyval == GDK_KEY_Tab) 
     {
         // gtk_widget_set_state_flags (search_entry, GTK_STATE_FLAG_NORMAL, FALSE);
+        
         gtk_widget_grab_focus (update_button);
-        // gtk_entry_grab_focus_without_selecting (search_entry);
+        
+        //gtk_entry_grab_focus_without_selecting (search_entry);
         // gtk_widget_activate (search_entry);
         find_next_word (word);
     }
@@ -402,14 +406,3 @@ void show_about_dialog(GtkButton * button, gpointer none)
     gtk_widget_destroy(dialog);
 }
 
-gboolean cursor_match   (GtkEntryCompletion *entrycomple,
-                        GtkTreeModel       *model,
-                        GtkTreeIter        *iter,
-                        gpointer            user_data)
-{
-    char * word;
-    gtk_tree_model_get (model, iter, 0, &word, -1);
-    printf("%s\n", word);
-    
-    return FALSE;
-}

@@ -1,6 +1,7 @@
 #include <string.h>
 #include <gtk/gtk.h>
 
+#include "soundex.h"
 #include "bt-5.0.0/inc/btree.h"
 #include "dcallback.h"
 
@@ -92,6 +93,49 @@ int convert_text_to_bt(char * filename)
     return 1;
 }
 
+void show_matching_soundex_word (char * word)
+{
+    char * soundex_code = soundex (word);
+    char nxt_word[WORD_LENGHT];
+    char prv_word[WORD_LENGHT];
+    char soundex_list[1024] = {0};
+    // printf("%s\n", soundex_code);
+    int value, i, n=5;
+
+    for (i=0; i<n && n<100; i++)
+    {
+        if (!bprvky (data, prv_word, &value))
+            if (!strcmp (soundex_code, soundex(prv_word)))
+            {   
+                strcat (soundex_list, prv_word);
+                strcat (soundex_list, "\n");
+            }
+        else n++; 
+    }
+
+    n=5;
+    for (i=0; i<n && n<100; i++)
+    {
+        if (!bnxtky (data, nxt_word, &value))
+            if (!strcmp (soundex_code, soundex(nxt_word)))
+            {   
+                strcat (soundex_list, nxt_word);
+                strcat (soundex_list, "\n");
+            }
+        else n++; 
+    }
+    // printf("%s\n", soundex_list);
+    if (soundex_list[0] != 0)  
+    {
+        //Cap Nhat Buffer
+        gtk_text_buffer_set_text(GTK_TEXT_BUFFER(textbuffer), soundex_list, -1);
+        //Set Buffer moi vao Text View
+        gtk_text_view_set_buffer(GTK_TEXT_VIEW (meaning_textview), GTK_TEXT_BUFFER( textbuffer));
+
+        gtk_label_set_label (GTK_LABEL (status_label), "Không tìm thấy. Ý bạn là...");
+    }
+}
+
 void search_entry_activate (GtkEntry * entry, gpointer NONE)
 {
     gtk_widget_set_visible (GTK_LABEL (status_label), FALSE);
@@ -126,6 +170,11 @@ void search_entry_activate (GtkEntry * entry, gpointer NONE)
         //An Update Button  "Sửa"
         gtk_widget_set_sensitive (GTK_WIDGET(update_button), FALSE);
         gtk_widget_set_sensitive (GTK_WIDGET(add_button), TRUE);
+
+
+        // TODO: Them Soundex Func "neu muon"
+        show_matching_soundex_word (word);
+            
 
     }
     else 
@@ -199,7 +248,8 @@ void yes_delete_clicked (GtkButton * button, gpointer NONE)
 {
     char * word = gtk_label_get_text (GTK_LABEL(word_label));
     int fail = btdel (data, word);
-    char notify[255];
+    
+    static char notify[255];
     if (!fail) strcpy (notify, "Đã xóa \"");
     else strcpy (notify, "Không thể xóa  \"");
     strcat (notify, word);
@@ -240,7 +290,7 @@ void yes_add_clicked (GtkButton * button, gpointer NONE)
 
     int fail = btins (data, word, meaning, strlen(meaning)+1);
 
-    char notify[255];
+    static char notify[255];
     if (!fail) strcpy (notify, "Đã thêm \"");
     else strcpy (notify, "Không thể thêm  \"");
     strcat (notify, word);
@@ -285,7 +335,7 @@ void yes_update_clicked (GtkButton * button, gpointer NONE)
 
     int fail = btupd (data, word, meaning, strlen(meaning)+1);
 
-    char notify[255];
+    static char notify[255];
     if (!fail) strcpy (notify, "Đã cập nhật \"");
     else strcpy (notify, "Không thể cập nhật  \"");
     strcat (notify, word);
@@ -337,16 +387,17 @@ void show_completion (char * word)
     }
     else btins(data, word, "#", 1);
 
-    int i;
-    for (i = 0; i < 10; i++) 
+    int i, n=10;
+    for (i = 0; (i <= n) && (n < 100); i++) 
     {
         int value;
-		bnxtky (data, nextword, &value);
-        if (prefix(nextword, word))
-        {
-            gtk_list_store_append(liststore, &Iter);
-            gtk_list_store_set(liststore, &Iter, 0, nextword, -1 );
-        }
+		if (!bnxtky (data, nextword, &value))
+            if (prefix(nextword, word))
+            {
+                gtk_list_store_append(liststore, &Iter);
+                gtk_list_store_set(liststore, &Iter, 0, nextword, -1 );
+            }
+            else n++;
 	}
     if (!existed) btdel(data, word);
 }
@@ -376,7 +427,7 @@ gboolean search_entry_key_press (GtkEntry * entry, GdkEvent * event, gpointer NO
         {
             // Phải khởi tạo biến cho strlen() ở ngoài vì sau khi gán phần tử cuốí cùng của word[] là key_valua thì không có '\0' kí tử rác ở sau làm strlen() không ổn định
             int l = strlen(word);
-            if ((keyEvent->keyval != 65364) && (keyEvent->keyval != 65362))
+            if ((keyEvent->keyval != 65364) && (keyEvent->keyval != 65362)) // Up & Down Arrow
                 word[l] = keyEvent->keyval;
             word[l+1] = '\0';
         } 

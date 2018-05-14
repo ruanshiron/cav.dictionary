@@ -4,6 +4,7 @@
 #include <string.h>
 #include <gtk/gtk.h>
 
+#include "soundex.h"
 #include "bt-5.0.0/inc/btree.h"
 
 #define WORD_LENGHT 255

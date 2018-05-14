@@ -50,6 +50,9 @@ int main (int argc, char *argv[])
     //Khoi tao giao dien nguoi dung
     gtk_init (&argc, &argv);
 
+    // Khoi tao Soundex Func
+    soundex_init();
+
     //Khoi tao GtkBuilder
     builder = gtk_builder_new ();
     gtk_builder_add_from_file (builder, "glade/newW.ui", NULL);
@@ -66,68 +69,68 @@ int main (int argc, char *argv[])
 
         //Khoi tao Word Label
         word_label = gtk_builder_get_object (builder, "word_label");
-
         // Khoi tao status label
         status_label = gtk_builder_get_object (builder, "status_label");
-        
         //Khoi tao Meaning TextView && TextBuffer
         meaning_textview = gtk_builder_get_object (builder, "meaning_textview");
         textbuffer = gtk_builder_get_object (builder, "textbuffer");
-
-        //Khoi tao popover >> pop label
-        // popover = gtk_builder_get_object (builder, "popover");
-        // pop_label = gtk_builder_get_object (builder, "pop_label");
-
         //Khoi tao Info Button
         info_button = gtk_builder_get_object (builder, "info_button");
-        g_signal_connect (info_button, "clicked", G_CALLBACK (show_about_dialog), NULL);
-
         //Khoi tao Delete Button
         delete_button = gtk_builder_get_object (builder, "delete_button");
-        g_signal_connect (delete_button, "clicked", G_CALLBACK (delete_button_clicked), NULL);
-
         //Khoi tao Update Button
         update_button = gtk_builder_get_object (builder, "update_button");
-        g_signal_connect (update_button, "clicked", G_CALLBACK (update_button_clicked), NULL);
-
         //Khoi tao Add Button
         add_button = gtk_builder_get_object (builder, "add_button");
-        g_signal_connect (add_button, "clicked", G_CALLBACK (add_button_clicked), NULL);
-
         //Khoi tao Search Entry
         search_entry = gtk_builder_get_object (builder, "search_entry");
-        g_signal_connect (search_entry, "activate", G_CALLBACK (search_entry_activate), NULL);
-        g_signal_connect (search_entry, "grab-focus", G_CALLBACK (no_button_clicked), NULL);
-        g_signal_connect (search_entry, "key-press-event", G_CALLBACK (search_entry_key_press), NULL);
-
-
-        //Khoi tao Info Bar
+         //Khoi tao Info Bar
         info_bar = gtk_builder_get_object (builder, "info_bar");
-
         //Khoi tao Notify Label
         notify_label = gtk_builder_get_object (builder, "notify_label");
 
         //Khoi tao Yes Button >> NO CALLBACK function 
         yes_delete = gtk_builder_get_object (builder, "yes_delete");
-        g_signal_connect (yes_delete, "clicked", G_CALLBACK (yes_delete_clicked), NULL);
-
         yes_add = gtk_builder_get_object (builder, "yes_add");
-        g_signal_connect (yes_add, "clicked", G_CALLBACK (yes_add_clicked), NULL);
-
         yes_update = gtk_builder_get_object (builder, "yes_update");
-        g_signal_connect (yes_update, "clicked", G_CALLBACK (yes_update_clicked), NULL);
-
-        //khoi tao No Button >> NO CALLBACK function 
         no_button = gtk_builder_get_object (builder, "no_button");
-        g_signal_connect (no_button, "clicked", G_CALLBACK (no_button_clicked), NULL);
 
         // Khoi tao completion
         comple = gtk_entry_completion_new();
         gtk_entry_completion_set_text_column(comple, 0);
-        liststore = gtk_list_store_new(1, G_TYPE_STRING);
-
+        liststore = gtk_list_store_new(10, G_TYPE_STRING, G_TYPE_STRING,
+                                        G_TYPE_STRING, G_TYPE_STRING,
+                                        G_TYPE_STRING, G_TYPE_STRING,
+                                        G_TYPE_STRING, G_TYPE_STRING,
+                                        G_TYPE_STRING, G_TYPE_STRING);
         gtk_entry_completion_set_model(comple, GTK_TREE_MODEL(liststore));
         gtk_entry_set_completion(GTK_ENTRY(search_entry), comple);
+
+        // Khoi tao popover >> pop label
+        // popover = gtk_builder_get_object (builder, "popover");
+        // pop_label = gtk_builder_get_object (builder, "pop_label");
+
+        // Ket noi Cac tin hieu 
+        g_signal_connect (info_button, "clicked", G_CALLBACK (show_about_dialog), NULL);
+
+        g_signal_connect (delete_button, "clicked", G_CALLBACK (delete_button_clicked), NULL);   
+        g_signal_connect (update_button, "clicked", G_CALLBACK (update_button_clicked), NULL);     
+        g_signal_connect (add_button, "clicked", G_CALLBACK (add_button_clicked), NULL);
+
+            
+        g_signal_connect (search_entry, "key-press-event", G_CALLBACK (search_entry_key_press), NULL);
+        g_signal_connect (search_entry, "activate", G_CALLBACK (search_entry_activate), NULL);
+        g_signal_connect (search_entry, "grab-focus", G_CALLBACK (no_button_clicked), NULL);
+
+           
+        g_signal_connect (yes_delete, "clicked", G_CALLBACK (yes_delete_clicked), NULL); 
+        g_signal_connect (yes_add, "clicked", G_CALLBACK (yes_add_clicked), NULL);
+        g_signal_connect (yes_update, "clicked", G_CALLBACK (yes_update_clicked), NULL);
+
+        //khoi tao No Button >> NO CALLBACK function 
+        g_signal_connect (no_button, "clicked", G_CALLBACK (no_button_clicked), NULL);
+
+        
         
         //g_signal_connect (comple, "cursor-on-match", G_CALLBACK (cursor_match), NULL);
         

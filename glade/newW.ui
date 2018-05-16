@@ -50,7 +50,7 @@
   <object class="GtkApplicationWindow" id="window">
     <property name="can_focus">False</property>
     <property name="default_width">640</property>
-    <property name="default_height">350</property>
+    <property name="default_height">380</property>
     <child>
       <object class="GtkBox" id="main_box">
         <property name="visible">True</property>
@@ -268,6 +268,7 @@
           <object class="GtkButton" id="add_button">
             <property name="label" translatable="yes">Thêm</property>
             <property name="visible">True</property>
+            <property name="sensitive">False</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="relief">none</property>
@@ -280,6 +281,7 @@
           <object class="GtkButton" id="update_button">
             <property name="label" translatable="yes">Sửa</property>
             <property name="visible">True</property>
+            <property name="sensitive">False</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <property name="relief">none</property>

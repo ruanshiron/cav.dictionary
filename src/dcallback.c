@@ -209,6 +209,8 @@ void add_button_clicked (GtkButton * button, gpointer NONE)
 
     gtk_label_set_label (GTK_LABEL(word_label), word);
 
+    gtk_text_buffer_set_text(GTK_TEXT_BUFFER(textbuffer), "", -1);
+    gtk_text_view_set_buffer(GTK_TEXT_VIEW (meaning_textview), GTK_TEXT_BUFFER( textbuffer));
     gtk_text_view_set_editable (GTK_TEXT_VIEW (meaning_textview), TRUE);
     gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (meaning_textview), TRUE);
 

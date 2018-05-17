@@ -223,9 +223,9 @@ void add_button_clicked (GtkButton * button, gpointer NONE)
 
 void update_button_clicked (GtkButton * button, gpointer NONE)
 {
-    char * word = gtk_entry_get_text (GTK_ENTRY(search_entry));
+    // char * word = gtk_entry_get_text (GTK_ENTRY(search_entry));
 
-    gtk_label_set_label (GTK_LABEL(word_label), word);
+    // gtk_label_set_label (GTK_LABEL(word_label), word);
 
     gtk_text_view_set_editable (GTK_TEXT_VIEW (meaning_textview), TRUE);
     gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (meaning_textview), TRUE);
